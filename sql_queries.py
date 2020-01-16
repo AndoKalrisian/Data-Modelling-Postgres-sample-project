@@ -12,11 +12,11 @@ songplay_table_create = ("""
 CREATE TABLE IF NOT EXISTS songplays (
     songplay_id int PRIMARY KEY, 
     start_time timestamp,
-    user_id int NOT NULL,
+    user_id int,
     level text,
-    song_id text NOT NULL,
-    artist_id text NOT NULL,
-    session_id int NOT NULL,
+    song_id text,
+    artist_id text,
+    session_id int,
     location text,
     user_agent text
 )""")
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 song_table_create = ("""
 CREATE TABLE IF NOT EXISTS songs (
-    song_id int PRIMARY KEY,
+    song_id text PRIMARY KEY,
     title text,
     artist_id text NOT NULL,
     year int,
@@ -70,11 +70,11 @@ INSERT INTO songplays (songplay_id,
     start_time,
     user_id,
     level,
-    songplay_id,
+    song_id,
     artist_id,
     session_id,
     location,
-    user_agent) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    user_agent) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING
 """)
 
 user_table_insert = ("""
@@ -84,7 +84,7 @@ INSERT INTO users (
     last_name,
     gender,
     level
-) VALUES (%s, %s, %s, %s, %s)
+) VALUES (%s, %s, %s, %s, %s) ON CONFLICT DO NOTHING
 """)
 
 song_table_insert = ("""
@@ -94,7 +94,10 @@ INSERT INTO songs (
     artist_id,
     year,
     duration
-) VALUES (%s, %s, %s, %s, %s)
+) VALUES (%s, %s, %s, %s, %s) 
+ON CONFLICT (song_id)
+DO UPDATE
+  SET title = EXCLUDED.title
 """)
 
 artist_table_insert = ("""
@@ -104,7 +107,7 @@ INSERT INTO artists (
     location,
     latitude,
     longitude
-) VALUES (%s, %s, %s, %s, %s)
+) VALUES (%s, %s, %s, %s, %s) ON CONFLICT DO NOTHING
 """)
 
 
@@ -117,12 +120,20 @@ INSERT INTO time (
     month,
     year,
     weekday
-) VALUES (%s, %s, %s, %s, %s)
+) VALUES (%s, %s, %s, %s, %s, %s, %s)
+ON CONFLICT DO NOTHING
 """)
 
 # FIND SONGS
 
 song_select = ("""
+SELECT s.song_id, a.artist_id
+FROM songs s
+JOIN artists a 
+ON s.artist_id = a.artist_id
+AND %s = s.title
+AND %s = a.name
+AND %s = s.duration
 """)
 
 # QUERY LISTS
