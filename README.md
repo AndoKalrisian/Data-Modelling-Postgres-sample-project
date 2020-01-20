@@ -21,6 +21,18 @@ The ETL pipeline used is as follows:
 
 Given my limited experience with ETL pipelines, I feel like this is efficient enough given the size of the database.  I would welcome and feedback from the person reviewing this about why this ETL is a good one.  Thus far, this is beyond the scope of what has been taught in this course.
 
+## How to use (Windows Powershell)
+
+Create the database and tables:
+
+```py create_tables.py```
+
+Run etl process on song and log data:
+
+```py etl.py```
+
+Test queries can be found in the following jupyter notebook: 'test.ipynb'
+
 ## Context
 
 A startup called Sparkify wants to analyze the data they've been collecting on songs and user activity on their new music streaming app. The analytics team is particularly interested in understanding what songs users are listening to. Currently, they don't have an easy way to query their data, which resides in a directory of JSON logs on user activity on the app, as well as a directory with JSON metadata on the songs in their app.
