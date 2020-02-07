@@ -59,7 +59,8 @@ CREATE TABLE IF NOT EXISTS time (
     week int,
     month int,
     year int,
-    weekday int
+    weekday int,
+    epoch bigint
 )
 """)
 
@@ -120,8 +121,9 @@ INSERT INTO time (
     week,
     month,
     year,
-    weekday
-) VALUES (%s, %s, %s, %s, %s, %s, %s)
+    weekday,
+    epoch
+) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
 ON CONFLICT DO NOTHING
 """)
 
